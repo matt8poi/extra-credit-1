@@ -17,6 +17,7 @@ const App = (props) => {
     4: 0,
     5: 0
   })
+  const [topQuote, setTopQuote] = useState(0)
 
   const handleClick = () => {
     setSelected(Math.floor(Math.random() * props.anecdotes.length))
@@ -25,16 +26,32 @@ const App = (props) => {
   const vote = () => {
     const newVotes = {...numVotes}
     newVotes[selected] = numVotes[selected] + 1
-    console.log(newVotes)
+    let most = getMost(newVotes)
     setNumVotes(newVotes)
+    setTopQuote(most)
+  }
+
+  const getMost = (data) => {
+    let temp = 0
+    for (let i = 1; i < Object.keys(data).length; i++) {
+      if (data[temp] < data[i]) {
+        console.log('Made it here')
+        temp = i
+      }
+    }
+    return temp
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {props.anecdotes[selected]}
       <div>has {numVotes[selected]} votes</div>
       <Button onClick={vote} text='vote' />
       <Button onClick={handleClick} text='next anecdote' />
+      <h1>Anecdote with the most votes</h1>
+      {props.anecdotes[topQuote]}
+      <div>has {numVotes[topQuote]}</div>
     </div>
   )
 }
